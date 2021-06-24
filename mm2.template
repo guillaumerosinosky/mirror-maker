@@ -1,32 +1,20 @@
-clusters = A, B
+clusters source, target
 
-A.bootstrap.servers = ${SOURCE}
-B.bootstrap.servers = ${DESTINATION}
+source.bootstrap.servers = kafka1:9092
+target.bootstrap.servers = kafka2:9092
 
-A->B.enabled = true
-
-A->B.topics = ${TOPICS}
-
+offset.storage.replication.factor= 1
+status.storage.replication.factor= 1
+config.storage.replication.factor= 1
+replication.factor= 1
+source.cluster.alias =
 replication.policy.separator =
-source.cluster.alias = 
-target.cluster.alias =
 
-############################# Internal Topic Settings  #############################
-# The replication factor for mm2 internal topics "heartbeats", "B.checkpoints.internal" and
-# "mm2-offset-syncs.B.internal"
-# For anything other than development testing, a value greater than 1 is recommended to ensure availability such as 3.
-checkpoints.topic.replication.factor=1
-heartbeats.topic.replication.factor=1
-offset-syncs.topic.replication.factor=1
+topics = .*
+groups = .*
+emit.checkpoints.interval.seconds = 10
+sync.group.offsets.interval.seconds = 20
+---%<---
 
-# The replication factor for connect internal topics "mm2-configs.B.internal", "mm2-offsets.B.internal" and
-# "mm2-status.B.internal"
-# For anything other than development testing, a value greater than 1 is recommended to ensure availability such as 3.
-offset.storage.replication.factor=1
-status.storage.replication.factor=1
-config.storage.replication.factor=1
-
-# customize as needed
-# replication.policy.separator = _
-# sync.topic.acls.enabled = false
-# emit.heartbeats.interval.seconds = 5
+source->target.sync.group.offsets.enabled = true
+source->target.enabled = true
